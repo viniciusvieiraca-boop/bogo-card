@@ -248,7 +248,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   // ✏️ EDIT: Paste your Google Form pre-filled URL here (keep the = at the end)
-  const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeSbtIihzwqonM9_50cw80jSMMZswn0Et0rFFy7Jfkpi8_ypw/viewform?usp=pp_url&entry.14183828=';
+const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeSbtIihzwqonM9_50cw80jSMMZswn0Et0rFFy7Jfkpi8_ypw/viewform?usp=pp_url&entry.14183828=';
 
   function generateCard() {
     const raw = document.getElementById('key-input').value.trim();
@@ -266,17 +266,17 @@
 
     document.getElementById('code-display').textContent = raw;
 
-    const Div = document.getElementById('code');
+    const qrDiv = document.getElementById('qrcode');
     qrDiv.innerHTML = '';
 
-new QRCode(qrDiv, {
-  text: FORM_BASE_URL + encodeURIComponent(raw),
-  width: 180,
-  height: 180,
-  colorDark: '#1a1a2e',
-  colorLight: '#ffffff',
-  correctLevel: QRCode.CorrectLevel.H
-});
+    new QRCode(qrDiv, {
+      text: FORM_BASE_URL + encodeURIComponent(raw),
+      width: 180,
+      height: 180,
+      colorDark: '#1a1a2e',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
 
     document.getElementById('step-enter').style.display = 'none';
     document.getElementById('step-card').style.display = 'flex';
