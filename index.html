@@ -266,17 +266,17 @@
 
     document.getElementById('code-display').textContent = raw;
 
-    const qrDiv = document.getElementById('qrcode');
+    const Div = document.getElementById('code');
     qrDiv.innerHTML = '';
 
     new QRCode(qrDiv, {
-      text: FORM_BASE_URL + encodeURIComponent(raw),
-      width: 180,
-      height: 180,
-      colorDark: '#1a1a2e',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.H
-    });
+  text: FORM_BASE_URL + encodeURIComponent(raw),
+  width: 256,
+  height: 256,
+  colorDark: '#1a1a2e',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.L
+});
 
     document.getElementById('step-enter').style.display = 'none';
     document.getElementById('step-card').style.display = 'flex';
