@@ -7,194 +7,88 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet"/>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: #f0f0f0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       padding: 2rem 1rem;
       font-family: 'Inter', sans-serif;
     }
-
     .card {
-      background: #fff;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 400px;
-      overflow: hidden;
+      background: #fff; border-radius: 20px;
+      width: 100%; max-width: 400px; overflow: hidden;
       box-shadow: 0 4px 32px rgba(0,0,0,0.10);
     }
-
     .card-header {
-      background: #1a1a2e;
-      padding: 2rem 1.5rem 1.5rem;
-      text-align: center;
+      background: #1a1a2e; padding: 2rem 1.5rem 1.5rem; text-align: center;
     }
     .card-header .eyebrow {
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 6px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,0.45); margin-bottom: 6px;
     }
-    .card-header h1 {
-      font-size: 28px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-    .card-header .subtitle {
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 4px;
-    }
+    .card-header h1 { font-size: 28px; font-weight: 600; color: #fff; letter-spacing: -0.5px; }
+    .card-header .subtitle { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
 
-    #step-enter {
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-    .step-title {
-      font-size: 15px;
-      font-weight: 500;
-      color: #222;
-      text-align: center;
-    }
-    .step-sub {
-      font-size: 13px;
-      color: #888;
-      text-align: center;
-      line-height: 1.6;
-      margin-top: -6px;
-    }
+    /* ── Step 1: Enter key ── */
+    #step-enter { padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .step-title { font-size: 15px; font-weight: 500; color: #222; text-align: center; }
+    .step-sub { font-size: 13px; color: #888; text-align: center; line-height: 1.6; margin-top: -6px; }
     #key-input {
-      width: 100%;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: #333;
-      background: #f7f7f7;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s;
-      resize: none;
-      height: 72px;
+      width: 100%; font-family: 'Space Mono', monospace; font-size: 12px;
+      color: #333; background: #f7f7f7; border: 1.5px solid #e0e0e0;
+      border-radius: 10px; padding: 12px 14px; outline: none;
+      transition: border-color 0.2s; resize: none; height: 72px;
     }
     #key-input:focus { border-color: #1a1a2e; }
     #key-input.error { border-color: #e53935; }
-
-    #error-msg {
-      font-size: 12px;
-      color: #e53935;
-      display: none;
-      text-align: center;
+    #status-msg {
+      font-size: 12px; text-align: center; display: none;
+      padding: 8px 12px; border-radius: 8px; width: 100%;
     }
-
+    #status-msg.error   { color: #c62828; background: #ffebee; display: block; }
+    #status-msg.loading { color: #555;    background: #f5f5f5;  display: block; }
     #generate-btn {
-      width: 100%;
-      background: #1a1a2e;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 13px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      font-family: 'Inter', sans-serif;
+      width: 100%; background: #1a1a2e; color: #fff; border: none;
+      border-radius: 10px; padding: 13px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.2s; font-family: 'Inter', sans-serif;
     }
-    #generate-btn:hover { opacity: 0.85; }
+    #generate-btn:hover   { opacity: .85; }
+    #generate-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-    #step-card {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.75rem 1.5rem;
-    }
-
+    /* ── Step 2: Show QR ── */
+    #step-card { display: none; flex-direction: column; align-items: center; padding: 1.75rem 1.5rem; }
     .badge {
-      background: #e8f5e9;
-      color: #2e7d32;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 1.25rem;
+      background: #e8f5e9; color: #2e7d32; font-size: 11px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 1.25rem;
     }
     .qr-container {
-      background: #fff;
-      border: 1.5px solid #e8e8e8;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 1.25rem;
-      display: inline-block;
+      background: #fff; border: 1.5px solid #e8e8e8; border-radius: 16px;
+      padding: 16px; margin-bottom: 1.25rem; display: inline-block;
     }
-    .code-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #aaa;
-      margin-bottom: 6px;
-      align-self: flex-start;
-      width: 100%;
-    }
+    .code-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin-bottom: 6px; align-self: flex-start; width: 100%; }
     .code-value {
-      font-family: 'Space Mono', monospace;
-      font-size: 11.5px;
-      color: #555;
-      background: #f7f7f7;
-      border: 1px solid #e8e8e8;
-      border-radius: 8px;
-      padding: 10px 12px;
-      width: 100%;
-      word-break: break-all;
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
+      font-family: 'Space Mono', monospace; font-size: 11.5px; color: #555;
+      background: #f7f7f7; border: 1px solid #e8e8e8; border-radius: 8px;
+      padding: 10px 12px; width: 100%; word-break: break-all;
+      line-height: 1.6; margin-bottom: 0.75rem;
     }
-    .instructions {
-      font-size: 12.5px;
-      color: #888;
-      text-align: center;
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
-    }
+    .instructions { font-size: 12.5px; color: #888; text-align: center; line-height: 1.6; margin-bottom: 0.75rem; }
     #reset-btn {
-      font-size: 12px;
-      color: #aaa;
-      background: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: underline;
-      font-family: 'Inter', sans-serif;
-      padding: 4px;
+      font-size: 12px; color: #aaa; background: none; border: none;
+      cursor: pointer; text-decoration: underline;
+      font-family: 'Inter', sans-serif; padding: 4px;
     }
     #reset-btn:hover { color: #555; }
 
     .divider { height: 1px; background: #f0f0f0; margin: 0 1.5rem; }
-
     .card-footer { padding: 1.25rem 1.5rem 1.75rem; }
-    .footer-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #bbb;
-      margin-bottom: 10px;
-    }
+    .footer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #bbb; margin-bottom: 10px; }
     .biz-list { list-style: none; }
     .biz-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid #f5f5f5;
-      font-size: 13.5px;
-      color: #333;
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid #f5f5f5;
+      font-size: 13.5px; color: #333;
     }
     .biz-list li:last-child { border-bottom: none; }
     .biz-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf50; flex-shrink: 0; }
@@ -210,24 +104,22 @@
     <p class="subtitle">Buy one, get one free</p>
   </div>
 
-  <!-- Step 1: Enter key -->
+  <!-- Step 1: Enter & verify key -->
   <div id="step-enter">
     <p class="step-title">Enter your license key</p>
     <p class="step-sub">Copy the license key from your purchase email and paste it below.</p>
     <textarea id="key-input" placeholder="Paste your license key here&#10;e.g. 8B0661CF-0951435F-82ACD535-1D0904FC"></textarea>
-    <p id="error-msg">Please paste a valid license key before continuing.</p>
-    <button id="generate-btn" onclick="generateCard()">Get my BOGO Card →</button>
+    <div id="status-msg"></div>
+    <button id="generate-btn" onclick="handleGenerate()">Get my BOGO Card →</button>
   </div>
 
-  <!-- Step 2: Show card with QR -->
+  <!-- Step 2: Show QR card -->
   <div id="step-card">
     <div class="badge">Valid at all participating businesses</div>
-    <div class="qr-container">
-      <div id="qrcode"></div>
-    </div>
+    <div class="qr-container"><div id="qrcode"></div></div>
     <div class="code-label">Your unique code</div>
     <div class="code-value" id="code-display"></div>
-    <p class="instructions">Show this QR code to the cashier when redeeming your deal.<br/>Each deal can be used <strong>once per business</strong>.</p>
+    <p class="instructions">Show this QR code to the cashier.<br/>Each deal can be used <strong>once per business</strong>.</p>
     <button id="reset-btn" onclick="resetCard()">← Use a different key</button>
   </div>
 
@@ -237,55 +129,92 @@
     <p class="footer-label">Participating businesses</p>
     <ul class="biz-list">
       <!-- ✏️ EDIT: Replace with your actual businesses and deals -->
-      <li><span class="biz-dot"></span> Business One <span class="biz-deal">BOGO Pizza</span></li>
-      <li><span class="biz-dot"></span> Business Two <span class="biz-deal">BOGO Coffee</span></li>
+      <li><span class="biz-dot"></span> Business One   <span class="biz-deal">BOGO Pizza</span></li>
+      <li><span class="biz-dot"></span> Business Two   <span class="biz-deal">BOGO Coffee</span></li>
       <li><span class="biz-dot"></span> Business Three <span class="biz-deal">BOGO Burger</span></li>
-      <li><span class="biz-dot"></span> Business Four <span class="biz-deal">BOGO Dessert</span></li>
+      <li><span class="biz-dot"></span> Business Four  <span class="biz-deal">BOGO Dessert</span></li>
     </ul>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-  // ✏️ EDIT: Paste your Google Form pre-filled URL here (keep the = at the end)
-const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeSbtIihzwqonM9_50cw80jSMMZswn0Et0rFFy7Jfkpi8_ypw/viewform?usp=pp_url&entry.14183828=';
+  // ✏️ EDIT: Paste your Apps Script Web App URL here (you get this after deploying)
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbk2wmiTo_qFW0eEQSRO-8bui4ittbRENwQI_80uXKlqKLPPG8CMDKNztD4LScuDsY/exec';
 
-  function generateCard() {
-    const raw = document.getElementById('key-input').value.trim();
+  async function handleGenerate() {
+    const raw = document.getElementById('key-input').value.trim().toUpperCase();
     const input = document.getElementById('key-input');
-    const errorMsg = document.getElementById('error-msg');
+    const statusMsg = document.getElementById('status-msg');
+    const btn = document.getElementById('generate-btn');
 
     if (!raw) {
       input.classList.add('error');
-      errorMsg.style.display = 'block';
+      showStatus('error', 'Please paste your license key first.');
       return;
     }
 
     input.classList.remove('error');
-    errorMsg.style.display = 'none';
+    showStatus('loading', 'Verifying your license key…');
+    btn.disabled = true;
 
-    document.getElementById('code-display').textContent = raw;
+    try {
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=verify&code=${encodeURIComponent(raw)}`);
+      const data = await res.json();
+
+      if (data.valid) {
+        showCard(raw);
+      } else {
+        showStatus('error', 'Invalid license key. Please check and try again.');
+        btn.disabled = false;
+      }
+    } catch (err) {
+      showStatus('error', 'Could not verify key. Check your connection and try again.');
+      btn.disabled = false;
+    }
+  }
+
+  function showCard(code) {
+    document.getElementById('code-display').textContent = code;
 
     const qrDiv = document.getElementById('qrcode');
     qrDiv.innerHTML = '';
 
+    // QR points to Apps Script redemption page
+    const redeemUrl = `${APPS_SCRIPT_URL}?action=redeem&code=${encodeURIComponent(code)}`;
+
     new QRCode(qrDiv, {
-      text: FORM_BASE_URL + encodeURIComponent(raw),
-      width: 180,
-      height: 180,
+      text: redeemUrl,
+      width: 256,
+      height: 256,
       colorDark: '#1a1a2e',
       colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.H
+      correctLevel: QRCode.CorrectLevel.L
     });
 
     document.getElementById('step-enter').style.display = 'none';
     document.getElementById('step-card').style.display = 'flex';
+    document.getElementById('generate-btn').disabled = false;
+    hideStatus();
   }
 
   function resetCard() {
     document.getElementById('step-card').style.display = 'none';
     document.getElementById('step-enter').style.display = 'flex';
     document.getElementById('key-input').value = '';
+    hideStatus();
+  }
+
+  function showStatus(type, msg) {
+    const el = document.getElementById('status-msg');
+    el.className = type;
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function hideStatus() {
+    const el = document.getElementById('status-msg');
+    el.style.display = 'none';
   }
 </script>
 
